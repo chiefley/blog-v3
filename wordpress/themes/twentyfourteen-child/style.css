@@ -1,0 +1,33 @@
+/*
+ Theme Name:   Twenty Fourteen Child
+ Theme URI:    https://wordpress.org/themes/twentyfourteen/
+ Description:  A child theme of Twenty Fourteen with custom modifications
+ Author:       Your Name
+ Author URI:   https://yoursite.com
+ Template:     twentyfourteen
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Text Domain:  twentyfourteen-child
+*/
+
+/* ==========================================================================
+   Custom Styles
+   ========================================================================== */
+
+/* Content width similar to reference site */
+.site-content .entry-content,
+.site-content .entry-summary,
+.page-content {
+    max-width: 900px;
+}
+
+/* Ensure widget titles are visible and styled */
+.widget-title {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+/* Add any additional custom styles below this line */
