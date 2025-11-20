@@ -32,6 +32,9 @@ async function buildComponent(component) {
   try {
     await build({
       configFile: false,
+      define: {
+        'process.env.NODE_ENV': JSON.stringify('production')
+      },
       build: {
         lib: {
           entry: component.entry,
