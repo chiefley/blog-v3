@@ -5,9 +5,15 @@ import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  root: 'components/examples', // Point to examples folder for dev server
+  resolve: {
+    alias: {
+      '/src': resolve(__dirname, 'components/src')
+    }
+  },
   build: {
     lib: {
-      entry: resolve(__dirname, 'components/src/Calculator/index.ts'),
+      entry: resolve(__dirname, 'components/src/Calculator/index.tsx'),
       name: 'Calculator',
       fileName: (format) => `calculator.${format}.js`,
       formats: ['iife'] // IIFE for embedding in WordPress

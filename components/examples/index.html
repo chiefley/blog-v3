@@ -43,12 +43,23 @@
     </div>
 
     <div class="component-section">
-      <h2 class="component-title">Add More Components Here</h2>
-      <p style="color: #999; text-align: center;">
-        Create new components in <code>components/src/</code> and preview them here
+      <h2 class="component-title">Dawkins Weasel Simulation</h2>
+      <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">
+        A demonstration of Richard Dawkins' "weasel" algorithm - evolutionary text optimization through mutation and selection.
       </p>
+      <div data-component="dawkins-weasel-simulation"></div>
     </div>
 
-    <script type="module" src="../src/Calculator/index.ts"></script>
+    <div class="component-section" style="max-width: 1200px;">
+      <h2 class="component-title">Optimized Weasel Simulation</h2>
+      <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">
+        A visual genetic algorithm simulation showing weasels evolving to find food sources. Try adjusting the speed and enabling the predator!
+      </p>
+      <div data-component="optimized-weasel-simulation"></div>
+    </div>
+
+    <script type="module" src="/src/Calculator/index.tsx"></script>
+    <script type="module" src="/src/DawkinsWeaselSimulation/index.tsx"></script>
+    <script type="module" src="/src/OptimizedWeaselSimulation/index.tsx"></script>
   </body>
 </html>

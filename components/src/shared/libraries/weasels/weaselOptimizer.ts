@@ -42,10 +42,10 @@ export class WeaselSimulationOptimizer {
       const originalStopClick = stopButton.onclick;
 
       // Replace run button handler
-      runButton.onclick = (e: MouseEvent) => {
+      runButton.onclick = (e) => {
         // Call original handler first
         if (originalRunClick) {
-          originalRunClick.call(runButton, e);
+          originalRunClick.call(runButton, e as MouseEvent);
         }
 
         // Start optimized cycle
@@ -53,10 +53,10 @@ export class WeaselSimulationOptimizer {
       };
 
       // Replace stop button handler
-      stopButton.onclick = (e: MouseEvent) => {
+      stopButton.onclick = (e) => {
         // Call original handler first
         if (originalStopClick) {
-          originalStopClick.call(stopButton, e);
+          originalStopClick.call(stopButton, e as MouseEvent);
         }
 
         // Stop optimized cycle

@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import OptimizedWeaselSimulation from './OptimizedWeaselSimulation'
 import './OptimizedWeaselSimulation.css'
 
-// Auto-mount on page load
-document.addEventListener('DOMContentLoaded', () => {
+// Auto-mount function
+function autoMount() {
   const containers = document.querySelectorAll('[data-component="optimized-weasel-simulation"]')
   containers.forEach((container) => {
     // Read optional data attributes for configuration
@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
       </StrictMode>
     )
   })
-})
+}
+
+// Auto-mount on page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', autoMount)
+} else {
+  // DOM already loaded
+  autoMount()
+}
 
 export { OptimizedWeaselSimulation }

@@ -19,8 +19,8 @@ export function mountCalculator(elementId: string) {
   )
 }
 
-// Auto-mount if data attribute is present
-document.addEventListener('DOMContentLoaded', () => {
+// Auto-mount function
+function autoMount() {
   const containers = document.querySelectorAll('[data-component="calculator"]')
   containers.forEach((container) => {
     const root = createRoot(container)
@@ -30,7 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
       </StrictMode>
     )
   })
-})
+}
+
+// Auto-mount if data attribute is present
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', autoMount)
+} else {
+  // DOM already loaded
+  autoMount()
+}
 
 // Export for manual use
 export { Calculator }

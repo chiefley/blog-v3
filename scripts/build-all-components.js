@@ -11,17 +11,17 @@ const __dirname = dirname(__filename)
 const components = [
   {
     name: 'Calculator',
-    entry: resolve(__dirname, '../components/src/Calculator/index.ts'),
+    entry: resolve(__dirname, '../components/src/Calculator/index.tsx'),
     fileName: 'calculator'
   },
   {
     name: 'DawkinsWeaselSimulation',
-    entry: resolve(__dirname, '../components/src/DawkinsWeaselSimulation/index.ts'),
+    entry: resolve(__dirname, '../components/src/DawkinsWeaselSimulation/index.tsx'),
     fileName: 'dawkins-weasel-simulation'
   },
   {
     name: 'OptimizedWeaselSimulation',
-    entry: resolve(__dirname, '../components/src/OptimizedWeaselSimulation/index.ts'),
+    entry: resolve(__dirname, '../components/src/OptimizedWeaselSimulation/index.tsx'),
     fileName: 'optimized-weasel-simulation'
   }
 ]
