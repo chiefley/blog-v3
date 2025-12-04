@@ -74,9 +74,22 @@ async function buildAll() {
   fs.mkdirSync(distDir, { recursive: true })
 
   // Build each component
+  let allCss = ''
   for (const component of components) {
     await buildComponent(component)
+
+    // Read and accumulate CSS
+    const cssPath = resolve(distDir, 'style.css')
+    if (fs.existsSync(cssPath)) {
+      const css = fs.readFileSync(cssPath, 'utf-8')
+      allCss += css + '\n'
+    }
   }
+
+  // Write combined CSS file
+  const combinedCssPath = resolve(distDir, 'style.css')
+  fs.writeFileSync(combinedCssPath, allCss)
+  console.log('\n✓ Combined all component styles into style.css')
 
   console.log('\n✓ All components built successfully!')
   console.log(`\nOutput directory: ${distDir}`)
