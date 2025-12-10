@@ -1,0 +1,63 @@
+{
+  "sites": [
+    {
+      "key": "applefinch",
+      "label": "AppleFinch",
+      "domains": [
+        "applefinch.com",
+        "www.applefinch.com"
+      ]
+    },
+    {
+      "key": "wa1x",
+      "label": "WA1X",
+      "domains": [
+        "wa1x.com",
+        "www.wa1x.com"
+      ]
+    }
+  ],
+  "components": [
+    {
+      "key": "calculator",
+      "name": "Calculator",
+      "entry": "wordpress/sites/applefinch/react/Calculator/index.tsx",
+      "fileName": "calculator",
+      "shortcode": "react-calculator",
+      "site": "applefinch",
+      "dataComponent": "calculator",
+      "dataAttributes": []
+    },
+    {
+      "key": "dawkins-weasel-simulation",
+      "name": "DawkinsWeaselSimulation",
+      "entry": "wordpress/sites/applefinch/react/DawkinsWeaselSimulation/index.tsx",
+      "fileName": "dawkins-weasel-simulation",
+      "shortcode": "react-dawkins-weasel",
+      "site": "applefinch",
+      "dataComponent": "dawkins-weasel-simulation",
+      "dataAttributes": [
+        "target-string",
+        "max-generations",
+        "height",
+        "show-controls"
+      ]
+    },
+    {
+      "key": "optimized-weasel-simulation",
+      "name": "OptimizedWeaselSimulation",
+      "entry": "wordpress/sites/applefinch/react/OptimizedWeaselSimulation/index.tsx",
+      "fileName": "optimized-weasel-simulation",
+      "shortcode": "react-optimized-weasel",
+      "site": "applefinch",
+      "dataComponent": "optimized-weasel-simulation",
+      "dataAttributes": [
+        "mutation-level",
+        "with-badger",
+        "initial-food-sources",
+        "height",
+        "show-controls"
+      ]
+    }
+  ]
+}

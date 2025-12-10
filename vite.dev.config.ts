@@ -7,6 +7,12 @@ export default defineConfig({
   plugins: [react()],
   root: 'components/examples',
   publicDir: resolve(__dirname, 'components/examples/public'),
+  resolve: {
+    alias: {
+      '/src': resolve(__dirname, 'wordpress/sites/applefinch/react'),
+      '@shared': resolve(__dirname, 'components/src/shared')
+    }
+  },
   server: {
     port: 3000,
     open: true

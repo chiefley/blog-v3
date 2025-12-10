@@ -1,19 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import OptimizedWeaselSimulation from './OptimizedWeaselSimulation'
-import './OptimizedWeaselSimulation.css'
+import DawkinsWeaselSimulation from './DawkinsWeaselSimulation'
 
 // Auto-mount function
 function autoMount() {
-  const containers = document.querySelectorAll('[data-component="optimized-weasel-simulation"]')
+  const containers = document.querySelectorAll('[data-component="dawkins-weasel-simulation"]')
   containers.forEach((container) => {
     // Read optional data attributes for configuration
-    const mutationLevel = container.getAttribute('data-mutation-level')
-      ? parseInt(container.getAttribute('data-mutation-level')!)
-      : undefined
-    const withBadger = container.getAttribute('data-with-badger') === 'true'
-    const initialFoodSources = container.getAttribute('data-initial-food-sources')
-      ? parseInt(container.getAttribute('data-initial-food-sources')!)
+    const targetString = container.getAttribute('data-target-string') || undefined
+    const maxGenerations = container.getAttribute('data-max-generations')
+      ? parseInt(container.getAttribute('data-max-generations')!)
       : undefined
     const height = container.getAttribute('data-height')
       ? parseInt(container.getAttribute('data-height')!)
@@ -23,10 +19,9 @@ function autoMount() {
     const root = createRoot(container)
     root.render(
       <StrictMode>
-        <OptimizedWeaselSimulation
-          mutationLevel={mutationLevel}
-          withBadger={withBadger}
-          initialFoodSources={initialFoodSources}
+        <DawkinsWeaselSimulation
+          targetString={targetString}
+          maxGenerations={maxGenerations}
           height={height}
           showControls={showControls}
         />
@@ -43,4 +38,4 @@ if (document.readyState === 'loading') {
   autoMount()
 }
 
-export { OptimizedWeaselSimulation }
+export { DawkinsWeaselSimulation }

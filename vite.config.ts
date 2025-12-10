@@ -8,12 +8,13 @@ export default defineConfig({
   root: 'components/examples', // Point to examples folder for dev server
   resolve: {
     alias: {
-      '/src': resolve(__dirname, 'components/src')
+      '/src': resolve(__dirname, 'wordpress/sites/applefinch/react'),
+      '@shared': resolve(__dirname, 'components/src/shared')
     }
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'components/src/Calculator/index.tsx'),
+      entry: resolve(__dirname, 'wordpress/sites/applefinch/react/Calculator/index.tsx'),
       name: 'Calculator',
       fileName: (format) => `calculator.${format}.js`,
       formats: ['iife'] // IIFE for embedding in WordPress

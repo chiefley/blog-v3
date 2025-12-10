@@ -3,162 +3,150 @@
  * Plugin Name: Embed React Components
  * Plugin URI: https://yoursite.com
  * Description: Embed React/TypeScript components into WordPress posts using shortcodes
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Your Name
  * License: GPL2
  */
 
-// Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
 }
 
-class EmbedReactComponents {
-
+class EmbedReactComponents
+{
     private $components_url;
+    private $config;
+    private $site_key;
 
-    public function __construct() {
-        // Set the URL where your built components are hosted
-        // Option 1: Upload to WordPress media library and set path
-        // Option 2: Host on a CDN
-        // Option 3: Serve from a subdomain
-        $this->components_url = get_site_url() . '/wp-content/uploads/react-components';
+    public function __construct()
+    {
+        $this->config = $this->load_config();
+        $this->site_key = $this->detect_site_key($this->config);
 
-        add_shortcode('react-calculator', array($this, 'render_calculator'));
-        add_shortcode('react-dawkins-weasel', array($this, 'render_dawkins_weasel'));
-        add_shortcode('react-optimized-weasel', array($this, 'render_optimized_weasel'));
+        // Outputs to /wp-content/uploads/react-components/<site>/
+        $base_upload_url = content_url('/uploads/react-components');
+        $this->components_url = trailingslashit($base_upload_url) . $this->site_key;
+
+        $this->register_shortcodes();
     }
 
-    /**
-     * Render the Calculator component
-     * Usage: [react-calculator]
-     */
-    public function render_calculator($atts) {
-        // Enqueue the component's JS and CSS
+    private function load_config()
+    {
+        $plugin_config = __DIR__ . '/components.json';
+        $repo_root_config = realpath(dirname(__DIR__, 2) . '/../config/components.json');
+
+        $config_path = file_exists($plugin_config) ? $plugin_config : $repo_root_config;
+
+        if (!$config_path || !file_exists($config_path)) {
+            error_log('Embed React Components: components.json not found.');
+            return array('sites' => array(), 'components' => array());
+        }
+
+        $config_json = file_get_contents($config_path);
+        $config = json_decode($config_json, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log('Embed React Components: Failed to parse components.json.');
+            return array('sites' => array(), 'components' => array());
+        }
+
+        return $config;
+    }
+
+    private function detect_site_key($config)
+    {
+        $sites = isset($config['sites']) && is_array($config['sites']) ? $config['sites'] : array();
+        $default = count($sites) ? $sites[0]['key'] : 'default';
+
+        $host = isset($_SERVER['HTTP_HOST']) ? strtolower($_SERVER['HTTP_HOST']) : '';
+
+        foreach ($sites as $site) {
+            if (empty($site['domains']) || !is_array($site['domains'])) {
+                continue;
+            }
+
+            foreach ($site['domains'] as $domain) {
+                if ($host === strtolower($domain)) {
+                    $detected = $site['key'];
+                    /**
+                     * Filter allows overriding the detected site key.
+                     */
+                    return apply_filters('embed_react_components_site_key', $detected, $site, $sites);
+                }
+            }
+        }
+
+        return apply_filters('embed_react_components_site_key', $default, null, $sites);
+    }
+
+    private function register_shortcodes()
+    {
+        if (empty($this->config['components']) || !is_array($this->config['components'])) {
+            return;
+        }
+
+        foreach ($this->config['components'] as $component) {
+            if (!isset($component['site']) || $component['site'] !== $this->site_key) {
+                continue;
+            }
+
+            $shortcode = isset($component['shortcode']) ? $component['shortcode'] : 'react-' . $component['fileName'];
+
+            add_shortcode($shortcode, function ($atts) use ($component) {
+                return $this->render_component($component, $atts);
+            });
+        }
+    }
+
+    private function render_component($component, $atts)
+    {
+        $file_name = $component['fileName'];
+        $handle = isset($component['key']) ? $component['key'] : $file_name;
+
         wp_enqueue_script(
-            'calculator-component',
-            $this->components_url . '/calculator.iife.js',
+            $handle,
+            trailingslashit($this->components_url) . $file_name . '.iife.js',
             array(),
             '1.0.0',
             true
         );
 
-        wp_enqueue_style(
-            'calculator-component-style',
-            $this->components_url . '/style.css',
-            array(),
-            '1.0.0'
-        );
+        $data_component = isset($component['dataComponent']) ? $component['dataComponent'] : $file_name;
+        $data_attrs = $this->build_data_attributes($component, $atts);
 
-        // Return the container div that the component will mount to
-        return '<div data-component="calculator"></div>';
+        return '<div data-component="' . esc_attr($data_component) . '"' . $data_attrs . '></div>';
     }
 
-    /**
-     * Render the Dawkins Weasel Simulation component
-     * Usage: [react-dawkins-weasel]
-     * Optional attributes:
-     *   target-string: The target string to evolve towards
-     *   max-generations: Maximum generations before stopping
-     *   height: Height of the results area in pixels
-     *   show-controls: Whether to show controls (true/false)
-     * Example: [react-dawkins-weasel target-string="Hello World" height="400"]
-     */
-    public function render_dawkins_weasel($atts) {
-        $atts = shortcode_atts(array(
-            'target-string' => '',
-            'max-generations' => '',
-            'height' => '',
-            'show-controls' => 'true'
-        ), $atts);
+    private function build_data_attributes($component, $atts)
+    {
+        $allowed = array();
 
-        wp_enqueue_script(
-            'dawkins-weasel-simulation',
-            $this->components_url . '/dawkins-weasel-simulation.iife.js',
-            array(),
-            '1.0.0',
-            true
-        );
+        if (!empty($component['dataAttributes']) && is_array($component['dataAttributes'])) {
+            foreach ($component['dataAttributes'] as $attr) {
+                $name = is_array($attr) ? ($attr['name'] ?? null) : $attr;
+                if (!$name) {
+                    continue;
+                }
+                $allowed[$name] = '';
+            }
+        }
 
-        wp_enqueue_style(
-            'dawkins-weasel-simulation-style',
-            $this->components_url . '/style.css',
-            array(),
-            '1.0.0'
-        );
+        if (!empty($allowed)) {
+            $atts = shortcode_atts($allowed, $atts);
+        } else {
+            $atts = array();
+        }
 
         $data_attrs = '';
-        if (!empty($atts['target-string'])) {
-            $data_attrs .= ' data-target-string="' . esc_attr($atts['target-string']) . '"';
-        }
-        if (!empty($atts['max-generations'])) {
-            $data_attrs .= ' data-max-generations="' . esc_attr($atts['max-generations']) . '"';
-        }
-        if (!empty($atts['height'])) {
-            $data_attrs .= ' data-height="' . esc_attr($atts['height']) . '"';
-        }
-        if ($atts['show-controls'] === 'false') {
-            $data_attrs .= ' data-show-controls="false"';
+        foreach ($atts as $key => $value) {
+            if ($value === '') {
+                continue;
+            }
+            $data_attrs .= ' data-' . esc_attr($key) . '="' . esc_attr($value) . '"';
         }
 
-        return '<div data-component="dawkins-weasel-simulation"' . $data_attrs . '></div>';
-    }
-
-    /**
-     * Render the Optimized Weasel Simulation component
-     * Usage: [react-optimized-weasel]
-     * Optional attributes:
-     *   mutation-level: Mutation level 1-5 (default 5)
-     *   with-badger: Include predator (true/false)
-     *   initial-food-sources: Number of food sources (default 25)
-     *   height: Canvas height in pixels (default 600)
-     *   show-controls: Whether to show controls (true/false)
-     * Example: [react-optimized-weasel with-badger="true" height="400"]
-     */
-    public function render_optimized_weasel($atts) {
-        $atts = shortcode_atts(array(
-            'mutation-level' => '',
-            'with-badger' => 'false',
-            'initial-food-sources' => '',
-            'height' => '',
-            'show-controls' => 'true'
-        ), $atts);
-
-        wp_enqueue_script(
-            'optimized-weasel-simulation',
-            $this->components_url . '/optimized-weasel-simulation.iife.js',
-            array(),
-            '1.0.0',
-            true
-        );
-
-        wp_enqueue_style(
-            'optimized-weasel-simulation-style',
-            $this->components_url . '/style.css',
-            array(),
-            '1.0.0'
-        );
-
-        $data_attrs = '';
-        if (!empty($atts['mutation-level'])) {
-            $data_attrs .= ' data-mutation-level="' . esc_attr($atts['mutation-level']) . '"';
-        }
-        if ($atts['with-badger'] === 'true') {
-            $data_attrs .= ' data-with-badger="true"';
-        }
-        if (!empty($atts['initial-food-sources'])) {
-            $data_attrs .= ' data-initial-food-sources="' . esc_attr($atts['initial-food-sources']) . '"';
-        }
-        if (!empty($atts['height'])) {
-            $data_attrs .= ' data-height="' . esc_attr($atts['height']) . '"';
-        }
-        if ($atts['show-controls'] === 'false') {
-            $data_attrs .= ' data-show-controls="false"';
-        }
-
-        return '<div data-component="optimized-weasel-simulation"' . $data_attrs . '></div>';
+        return $data_attrs;
     }
 }
 
-// Initialize the plugin
 new EmbedReactComponents();

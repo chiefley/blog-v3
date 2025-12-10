@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { WeaselSimulationOptimizer } from '../shared/libraries/weasels/weaselOptimizer';
-import './OptimizedWeaselSimulation.css';
+import { WeaselSimulationOptimizer } from '@shared/libraries/weasels/weaselOptimizer';
 
 interface OptimizedWeaselSimulationProps {
   mutationLevel?: number; // 1-5, defaults to 5

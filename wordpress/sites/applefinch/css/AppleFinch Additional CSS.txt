@@ -1,0 +1,891 @@
+/*************************************************************
+ * THE APPLE & THE FINCH – GLOBAL LIGHT THEME
+ * Base variables, typography refinements, components, React apps
+ *************************************************************/
+
+/* -----------------------------------------------------------
+   1. CSS VARIABLES – LIGHT MODE DEFAULTS
+   ----------------------------------------------------------- */
+
+:root {
+    /* Page + surfaces */
+    --af-page-bg:        #f9fafb;   /* overall page background */
+    --af-surface:        #ffffff;   /* cards, articles, widgets */
+    --af-surface-soft:   #f3f4f6;   /* softer boxes, subtle panels */
+    --af-surface-alt:    #f9fafb;   /* alternate strips/backgrounds */
+
+    /* Borders */
+    --af-border-subtle:  #e5e7eb;
+    --af-border-strong:  #d1d5db;
+
+    /* Typography */
+    --af-text-main:      #111827;
+    --af-text-muted:     #4b5563;
+    --af-text-soft:      #6b7280;
+    --af-heading:        #111827;
+
+    /* Links */
+    --af-link:           #2563eb;
+    --af-link-hover:     #1d4ed8;
+    --af-link-underline: rgba(37, 99, 235, 0.35);
+    --af-link-underline-hover: rgba(29, 78, 216, 0.7);
+
+    /* Code / blockquotes / tables */
+    --af-code-bg:        rgba(15, 23, 42, 0.04);
+    --af-code-border:    #d1d5db;
+    --af-blockquote-bg:  #f9fafb;
+    --af-blockquote-border: #d1d5db;
+    --af-table-row-alt:  rgba(15, 23, 42, 0.02);
+
+    /* Buttons & accents */
+    --af-accent:         #2563eb;
+    --af-accent-hover:   #1d4ed8;
+    --af-accent-soft:    rgba(37, 99, 235, 0.06);
+    --af-accent-soft-hover: rgba(37, 99, 235, 0.12);
+    --af-button-text:    #ffffff;
+
+    --af-danger:         #dc2626;
+    --af-danger-hover:   #b91c1c;
+    --af-success:        #16a34a;
+    --af-success-hover:  #15803d;
+    --af-warning:        #f97316;
+    --af-warning-hover:  #ea580c;
+
+    /* React apps – calculator */
+    --af-calc-bg:             #f3f4f6;
+    --af-calc-display-bg:     #111827;
+    --af-calc-display-text:   #f9fafb;
+    --af-calc-btn-bg:         var(--af-accent);
+    --af-calc-btn-hover-bg:   var(--af-accent-hover);
+    --af-calc-btn-text:       #ffffff;
+    --af-calc-op-bg:          var(--af-warning);
+    --af-calc-op-hover-bg:    var(--af-warning-hover);
+    --af-calc-clear-bg:       var(--af-danger);
+    --af-calc-clear-hover-bg: var(--af-danger-hover);
+    --af-calc-equals-bg:      var(--af-success);
+    --af-calc-equals-hover-bg: var(--af-success-hover);
+
+    /* React apps – Weasel simulation */
+    --af-weasel-surface:          var(--af-surface);
+    --af-weasel-surface-soft:     var(--af-surface-soft);
+    --af-weasel-border:           var(--af-border-subtle);
+    --af-weasel-result-bg:        var(--af-surface-alt);
+    --af-weasel-result-current:   var(--af-accent);
+    --af-weasel-result-past:      var(--af-text-main);
+    --af-weasel-result-empty:     var(--af-text-soft);
+    --af-weasel-control-bg:       var(--af-surface);
+    --af-weasel-control-border:   var(--af-border-subtle);
+    --af-weasel-stats-chip-bg:    var(--af-accent);
+    --af-weasel-stats-chip-text:  #ffffff;
+    --af-weasel-slider-track:     #e5e7eb;
+    --af-weasel-toggle-track-off: #e5e7eb;
+    --af-weasel-toggle-track-on:  var(--af-accent);
+    --af-weasel-toggle-knob:      #ffffff;
+    --af-weasel-toggle-knob-border: #d1d5db;
+}
+
+/* -----------------------------------------------------------
+   2. BASE TYPOGRAPHY & LAYOUT
+   ----------------------------------------------------------- */
+
+/* Smooth rendering + global colors (font-family handled in Customizer) */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--af-page-bg);
+    color: var(--af-text-main);
+}
+
+/* NOTE:
+   We deliberately DO NOT override .site, .site-content, .container here.
+   Their backgrounds and structural behavior are left to GeneratePress
+   via the Customizer. */
+
+/* Article & widget surfaces – only when GP uses "Separate Containers"
+   (GeneratePress adds .separate-containers on body in that layout.) */
+.separate-containers .inside-article,
+.separate-containers .widget,
+.separate-containers .sidebar .widget,
+.separate-containers .widget-area .widget {
+    background-color: var(--af-surface);
+    border-radius: 6px;
+    border: 1px solid var(--af-border-subtle);
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+    letter-spacing: 0.02em;
+    color: var(--af-heading);
+}
+
+h5, h6 {
+    letter-spacing: 0.04em; /* small labels can be tracked out slightly */
+    color: var(--af-text-muted);
+}
+
+/* Vertical rhythm for headings */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+}
+
+/* Post titles – at top of article */
+.entry-title {
+    margin-top: 0;
+    margin-bottom: 0.8em;
+}
+
+/* Paragraph spacing */
+.entry-content p {
+    margin-bottom: 1.1em;
+}
+
+/* Meta text (date, author, etc.) */
+.entry-meta {
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--af-text-soft);
+}
+
+/* Links */
+a,
+.entry-content a {
+    color: var(--af-link);
+    text-decoration-color: var(--af-link-underline);
+}
+
+a:hover,
+a:focus,
+.entry-content a:hover,
+.entry-content a:focus {
+    color: var(--af-link-hover);
+    text-decoration-color: var(--af-link-underline-hover);
+}
+
+/* Responsive heading tweaks */
+@media (max-width: 768px) {
+    h1, .entry-title {
+        letter-spacing: 0.015em;
+        margin-top: 1.4em;
+        margin-bottom: 0.6em;
+    }
+
+    h2, h3 {
+        margin-top: 1.4em;
+        margin-bottom: 0.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1, .entry-title {
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+    }
+
+    .entry-content p {
+        margin-bottom: 1em;
+    }
+}
+
+/* -----------------------------------------------------------
+   3. BLOCKQUOTES, PULLQUOTES, CODE, TABLES, IMAGES
+   ----------------------------------------------------------- */
+
+/* Standard blockquotes */
+.entry-content blockquote,
+.entry-content .wp-block-quote {
+    border-left: 3px solid var(--af-blockquote-border);
+    background: var(--af-blockquote-bg);
+    padding: 1.2em 1.5em;
+    margin: 2em 0;
+    font-style: italic;
+}
+
+.entry-content blockquote p:last-child,
+.entry-content .wp-block-quote p:last-child {
+    margin-bottom: 0;
+}
+
+.entry-content .wp-block-quote cite,
+.entry-content blockquote cite {
+    display: block;
+    margin-top: 0.75em;
+    font-style: normal;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.85em;
+}
+
+/* Pullquotes (Gutenberg) */
+.entry-content .wp-block-pullquote {
+    border: none;
+    border-top: 1px solid var(--af-border-subtle);
+    border-bottom: 1px solid var(--af-border-subtle);
+    background: var(--af-surface-alt);
+    padding: 1.8em 1.5em;
+    margin: 2.5em 0;
+    text-align: center;
+}
+
+.entry-content .wp-block-pullquote p {
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.entry-content .wp-block-pullquote cite {
+    display: block;
+    margin-top: 0.5em;
+    font-style: normal;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8em;
+}
+
+/* Code / pre / inline */
+.entry-content pre,
+.entry-content code,
+.entry-content kbd,
+.entry-content samp {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+                 "Liberation Mono", "Courier New", monospace;
+}
+
+/* Code blocks */
+.entry-content pre,
+.wp-block-code {
+    background: var(--af-code-bg);
+    border: 1px solid var(--af-code-border);
+    border-radius: 6px;
+    padding: 1.1em 1.3em;
+    overflow-x: auto;
+    font-size: 0.92em;
+    line-height: 1.5;
+}
+
+/* Inline code */
+.entry-content code {
+    background: var(--af-code-bg);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+    font-size: 0.9em;
+}
+
+/* Keyboard-style */
+.entry-content kbd {
+    background: var(--af-code-bg);
+    border-radius: 4px;
+    border: 1px solid var(--af-code-border);
+    padding: 0.1em 0.35em;
+}
+
+/* Tables */
+.entry-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.8em 0;
+    font-size: 0.95em;
+}
+
+.entry-content th,
+.entry-content td {
+    border: 1px solid var(--af-border-subtle);
+    padding: 0.7em 0.9em;
+}
+
+.entry-content th {
+    background: var(--af-surface-soft);
+    font-weight: 600;
+}
+
+.entry-content tr:nth-child(even) td {
+    background: var(--af-table-row-alt);
+}
+
+/* Images & captions */
+.entry-content img {
+    border-radius: 6px;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.entry-content figure {
+    margin: 2em 0;
+}
+
+.entry-content figcaption,
+.wp-caption-text {
+    margin-top: 0.6em;
+    font-size: 0.9em;
+    opacity: 0.8;
+    text-align: center;
+}
+
+/* Horizontal rule */
+.entry-content hr {
+    border: 0;
+    border-top: 1px solid var(--af-border-subtle);
+    margin: 2.5em 0;
+}
+
+/* -----------------------------------------------------------
+   4. FORMS & BUTTONS
+   ----------------------------------------------------------- */
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="password"],
+textarea,
+select {
+    background: #ffffff;
+    border: 1px solid var(--af-border-strong);
+    color: var(--af-text-main);
+    border-radius: 4px;
+    padding: 0.5em 0.7em;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--af-text-soft);
+}
+
+/* Focus outline */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--af-accent);
+    outline-offset: 2px;
+    border-color: var(--af-accent);
+}
+
+/* Buttons – GP + Gutenberg */
+button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+.wp-block-button__link,
+.button,
+a.button {
+    border-radius: 999px;
+    border: 1px solid var(--af-accent);
+    background: var(--af-accent);
+    color: var(--af-button-text);
+    padding: 0.5em 1.2em;
+    font-weight: 500;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+.wp-block-button__link:hover,
+.button:hover,
+a.button:hover {
+    background: var(--af-accent-hover);
+    border-color: var(--af-accent-hover);
+    transform: translateY(-1px);
+}
+
+/* Slightly dim secondary text (meta, small notes) */
+.entry-meta,
+.entry-meta a,
+.entry-content .has-small-font-size {
+    opacity: 0.85;
+}
+
+/* Smooth link transitions */
+a {
+    transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+}
+
+/* -----------------------------------------------------------
+   5. REACT APPS – CALCULATOR
+   ----------------------------------------------------------- */
+
+.calculator {
+    max-width: 320px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: var(--af-calc-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(15, 23, 42, 0.08);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+}
+
+.calculator-display {
+    background: var(--af-calc-display-bg);
+    color: var(--af-calc-display-text);
+    font-size: 2rem;
+    padding: 1rem;
+    text-align: right;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    min-height: 3rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.calculator-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+
+.calculator-btn {
+    padding: 1.25rem;
+    font-size: 1.25rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--af-calc-btn-bg);
+    color: var(--af-calc-btn-text);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.calculator-btn:hover {
+    background: var(--af-calc-btn-hover-bg);
+    transform: translateY(-2px);
+}
+
+.calculator-btn:active {
+    transform: translateY(0);
+}
+
+.calculator-btn-operation {
+    background: var(--af-calc-op-bg);
+}
+
+.calculator-btn-operation:hover {
+    background: var(--af-calc-op-hover-bg);
+}
+
+.calculator-btn-clear {
+    background: var(--af-calc-clear-bg);
+    grid-column: span 3;
+}
+
+.calculator-btn-clear:hover {
+    background: var(--af-calc-clear-hover-bg);
+}
+
+.calculator-btn-equals {
+    background: var(--af-calc-equals-bg);
+    grid-row: span 2;
+}
+
+.calculator-btn-equals:hover {
+    background: var(--af-calc-equals-hover-bg);
+}
+
+.calculator-btn-zero {
+    grid-column: span 2;
+}
+
+/* -----------------------------------------------------------
+   6. REACT APPS – DAWKINS WEASEL SIMULATION
+   ----------------------------------------------------------- */
+
+.dawkins-weasel-simulation {
+    padding: 0.75rem;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid var(--af-weasel-border);
+    border-radius: 0.5rem;
+    background-color: var(--af-weasel-surface);
+}
+
+.dawkins-weasel-simulation input[type="text"] {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--af-border-strong);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    background-color: #ffffff;
+    color: var(--af-text-main);
+}
+
+.dawkins-weasel-simulation input[type="text"]:focus {
+    outline: none;
+    border-color: var(--af-accent);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.dawkins-weasel-simulation input[type="text"]:disabled {
+    background-color: var(--af-surface-soft);
+    cursor: not-allowed;
+}
+
+.dawkins-weasel-simulation .results-container {
+    overflow: auto;
+    background-color: var(--af-weasel-result-bg);
+    border: 1px solid var(--af-weasel-border);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.dawkins-weasel-simulation .result-item {
+    font-family: monospace;
+    font-size: 0.875rem;
+    margin-bottom: 0;
+    line-height: 1.25;
+}
+
+.dawkins-weasel-simulation .result-item.current {
+    color: var(--af-weasel-result-current);
+    font-weight: 700;
+}
+
+.dawkins-weasel-simulation .result-item.past {
+    color: var(--af-weasel-result-past);
+}
+
+.dawkins-weasel-simulation .empty-results {
+    font-size: 0.875rem;
+    color: var(--af-weasel-result-empty);
+    font-style: italic;
+}
+
+.dawkins-weasel-simulation .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.dawkins-weasel-simulation button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: var(--af-accent);
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    min-width: 45px;
+    height: 1.75rem;
+}
+
+.dawkins-weasel-simulation button:hover:not(:disabled) {
+    background-color: var(--af-accent-hover);
+}
+
+.dawkins-weasel-simulation button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.dawkins-weasel-simulation button.secondary {
+    color: var(--af-accent);
+    background-color: #ffffff;
+    border: 1px solid var(--af-accent);
+}
+
+.dawkins-weasel-simulation button.secondary:hover:not(:disabled) {
+    background-color: var(--af-accent-soft);
+}
+
+.dawkins-weasel-simulation button.secondary:disabled {
+    color: #9ca3af;
+    border-color: #9ca3af;
+    background-color: #ffffff;
+}
+
+.dawkins-weasel-simulation .speed-control {
+    display: flex;
+    align-items: center;
+    margin-left: 0.5rem;
+    min-width: 120px;
+}
+
+.dawkins-weasel-simulation .speed-label {
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
+    min-width: 25px;
+}
+
+.dawkins-weasel-simulation input[type="range"] {
+    width: 80px;
+    height: 1.25rem;
+    accent-color: var(--af-accent);
+}
+
+.dawkins-weasel-simulation .generation-counter {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--af-text-muted);
+}
+
+.dawkins-weasel-simulation .generation-counter span {
+    margin-right: 0.25rem;
+}
+
+.dawkins-weasel-simulation .generation-value {
+    font-weight: 700;
+    color: var(--af-weasel-result-current);
+}
+
+/* -----------------------------------------------------------
+   7. REACT APPS – OPTIMIZED WEASEL CONTAINER
+   ----------------------------------------------------------- */
+
+.optimized-weasel-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.weasel-sim-container {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--af-weasel-border);
+    border-radius: 0.5rem;
+    background-color: var(--af-weasel-surface);
+}
+
+.optimized-controls {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--af-weasel-border);
+    border-radius: 0.25rem;
+    background-color: var(--af-weasel-surface-soft);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.speed-control-wrapper {
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+}
+
+.speed-icon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25rem;
+    color: var(--af-accent);
+}
+
+.speed-label {
+    font-size: 0.75rem;
+    margin-right: 0.5rem;
+    min-width: 45px;
+}
+
+.speed-slider {
+    flex-grow: 1;
+    margin: 0 0.5rem;
+    height: 0.5rem;
+    background-color: var(--af-weasel-slider-track);
+    border-radius: 0.5rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    accent-color: var(--af-accent);
+}
+
+.badger-toggle-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.badger-icon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25rem;
+}
+
+.badger-icon.active {
+    color: #dc2626;
+}
+
+.badger-icon.inactive {
+    color: #9ca3af;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Visually hidden checkbox */
+.toggle-checkbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 2.25rem;
+    height: 1.25rem;
+    background-color: var(--af-weasel-toggle-track-off);
+    border-radius: 9999px;
+    transition: background-color 0.2s;
+}
+
+.toggle-checkbox:focus + .toggle-switch {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.toggle-checkbox:checked + .toggle-switch {
+    background-color: var(--af-weasel-toggle-track-on);
+}
+
+.toggle-switch:after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background-color: var(--af-weasel-toggle-knob);
+    border: 1px solid var(--af-weasel-toggle-knob-border);
+    border-radius: 9999px;
+    height: 1rem;
+    width: 1rem;
+    transition: transform 0.2s;
+}
+
+.toggle-checkbox:checked + .toggle-switch:after {
+    transform: translate(100%);
+    border-color: #ffffff;
+}
+
+.toggle-text {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.settings-button {
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    opacity: 0.5;
+    cursor: not-allowed;
+    border: none;
+    background: none;
+}
+
+.settings-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Advanced controls panel */
+.advanced-controls {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--af-weasel-border);
+    border-radius: 0.25rem;
+    background-color: var(--af-weasel-surface-soft);
+}
+
+.advanced-controls p {
+    font-size: 0.75rem;
+    color: var(--af-text-soft);
+}
+
+/* Stats chips */
+.weasel-sim-container .stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 100%;
+    margin-bottom: 0.75rem;
+}
+
+.weasel-sim-container .stats > div {
+    padding: 0.25rem 0.75rem;
+    background-color: var(--af-weasel-stats-chip-bg);
+    color: var(--af-weasel-stats-chip-text);
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    min-width: fit-content;
+    text-align: center;
+}
+
+.weasel-sim-container .stats > div span {
+    font-weight: 700;
+}
+
+/* Canvas / field */
+.weasel-sim-container canvas.field {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--af-weasel-border);
+    border-radius: 0.25rem;
+    display: block;
+    background-color: var(--af-surface);
+}
+
+/* Controls row */
+.weasel-sim-container .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.weasel-sim-container .controls button {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--af-accent);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.weasel-sim-container .controls button:hover {
+    background-color: var(--af-accent-hover);
+}
+
+.weasel-sim-container .controls button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.weasel-sim-container .controls input {
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--af-border-subtle);
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    width: 50px;
+    font-size: 0.75rem;
+}
+
+.weasel-sim-container .controls label {
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}

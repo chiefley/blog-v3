@@ -202,3 +202,11 @@ For multi-site WordPress installations:
 ## License
 
 MIT
+
+## Multisite structure
+- Configure sites/components in `config/components.json` (site keys, domains, shortcode names, and entries). AppleFinch React sources live under `wordpress/sites/applefinch/react/`.
+- Build everything: `npm run build:all`; build one site: `npm run build:site <site>` (e.g., `applefinch`).
+- Upload bundles to `/wp-content/uploads/react-components/<site>/` to keep sites isolated.
+- Embed plugin reads the same config and registers shortcodes per-site based on the current domain.
+- Per-site theme tweaks: use `wordpress/sites/<site>/css/customizer.css` and related folders to version Additional CSS and snippets.
+- Component builds are JS-only; styling comes from WordPress Additional CSS/Darkify overrides (not from the bundles).

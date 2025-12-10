@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './DawkinsWeaselSimulation.css';
 
 // Import the Dawkins weasel classes (converted to proper ES modules)
 class DWeasel {

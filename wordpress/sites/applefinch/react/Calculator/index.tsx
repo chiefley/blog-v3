@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Calculator } from './Calculator'
-import './Calculator.css'
 
 // This function will be called to mount the component
 export function mountCalculator(elementId: string) {

@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import './Calculator.css'
-
 export function Calculator() {
   const [display, setDisplay] = useState('0')
   const [previousValue, setPreviousValue] = useState<number | null>(null)

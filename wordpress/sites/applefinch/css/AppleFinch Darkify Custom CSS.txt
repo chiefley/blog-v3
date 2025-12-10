@@ -1,0 +1,123 @@
+/* Darkify – Dark Mode CSS for Applefinch
+ * IMPORTANT:
+ * - All rules are scoped to .darkify_dark_mode_enabled
+ * - We use :not-disallowed so Darkify does NOT exclude these elements
+ */
+
+/* 1. Core dark theme variables + body baseline */
+.darkify_dark_mode_enabled body:not-disallowed {
+  /* Backgrounds */
+  --af-bg-page: #050509;
+  --af-bg-surface: #101019;
+  --af-bg-surface-soft: #151523;
+  --af-bg-header: #050509;
+  --af-bg-footer: #050509;
+  --af-bg-accent-soft: rgba(120, 173, 246, 0.08);
+
+  /* Borders */
+  --af-border-subtle: rgba(255, 255, 255, 0.06);
+  --af-border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --af-text-main: #f5f5f8;
+  --af-text-soft: #c3c7d0;
+  --af-text-muted: #959bb0;
+
+  /* Links */
+  --af-link: #9ec5ff;
+  --af-link-hover: #c7ddff;
+  --af-link-muted: #8ea4d0;
+
+  /* Chips / tags */
+  --af-chip-bg: rgba(158, 197, 255, 0.15);
+  --af-chip-text: #e3ecff;
+
+  /* Code */
+  --af-code-bg: #11131f;
+  --af-code-border: rgba(255, 255, 255, 0.08);
+
+  /* Form controls */
+  --af-input-bg: #050509;
+  --af-input-border: rgba(255, 255, 255, 0.16);
+  --af-input-border-focus: #9ec5ff;
+  --af-input-placeholder: #858cab;
+
+  color: var(--af-text-main);
+  background-color: var(--af-bg-page);
+}
+
+/* 2. Main layout shells (GeneratePress containers) */
+.darkify_dark_mode_enabled .site:not-disallowed,
+.darkify_dark_mode_enabled .site-header:not-disallowed,
+.darkify_dark_mode_enabled .site-footer:not-disallowed,
+.darkify_dark_mode_enabled .inside-header:not-disallowed,
+.darkify_dark_mode_enabled .inside-site-info:not-disallowed,
+.darkify_dark_mode_enabled .site-content:not-disallowed,
+.darkify_dark_mode_enabled .content-area:not-disallowed,
+.darkify_dark_mode_enabled .inside-article:not-disallowed,
+.darkify_dark_mode_enabled .widget:not-disallowed,
+.darkify_dark_mode_enabled .comments-area:not-disallowed,
+.darkify_dark_mode_enabled .inside-right-sidebar:not-disallowed {
+  background-color: var(--af-bg-surface-soft);
+  color: var(--af-text-main);
+  border-color: var(--af-border-subtle);
+}
+
+/* 3. Links */
+.darkify_dark_mode_enabled a:not-disallowed {
+  color: var(--af-link);
+}
+
+.darkify_dark_mode_enabled a:not-disallowed:hover,
+.darkify_dark_mode_enabled a:not-disallowed:focus {
+  color: var(--af-link-hover);
+}
+
+/* 4. Inputs / comment form / search */
+.darkify_dark_mode_enabled input.darkify_style_form_element:not-disallowed,
+.darkify_dark_mode_enabled textarea.darkify_style_form_element:not-disallowed,
+.darkify_dark_mode_enabled select.darkify_style_form_element:not-disallowed,
+.darkify_dark_mode_enabled .search-form input.darkify_style_form_element:not-disallowed {
+  background-color: var(--af-input-bg) !important;
+  color: var(--af-text-main) !important;
+  border-color: var(--af-input-border) !important;
+}
+
+.darkify_dark_mode_enabled input.darkify_style_form_element:not-disallowed::placeholder,
+.darkify_dark_mode_enabled textarea.darkify_style_form_element:not-disallowed::placeholder {
+  color: var(--af-input-placeholder);
+}
+
+/* 5. Buttons (including Darkify-styled & GP buttons) */
+.darkify_dark_mode_enabled .darkify_style_button:not-disallowed,
+.darkify_dark_mode_enabled button:not-disallowed,
+.darkify_dark_mode_enabled .button:not-disallowed,
+.darkify_dark_mode_enabled .wp-block-button__link:not-disallowed {
+  background-color: var(--af-link);
+  color: #050509;
+  border-color: transparent;
+}
+
+.darkify_dark_mode_enabled .darkify_style_button:not-disallowed:hover,
+.darkify_dark_mode_enabled button:not-disallowed:hover,
+.darkify_dark_mode_enabled .button:not-disallowed:hover,
+.darkify_dark_mode_enabled .wp-block-button__link:not-disallowed:hover {
+  background-color: var(--af-link-hover);
+}
+
+/* 6. Code blocks */
+.darkify_dark_mode_enabled pre:not-disallowed,
+.darkify_dark_mode_enabled code:not-disallowed {
+  background-color: var(--af-code-bg);
+  border-color: var(--af-code-border);
+  color: var(--af-text-main);
+}
+
+/* 7. React Weasel simulation shell */
+.darkify_dark_mode_enabled .optimized-weasel-wrapper:not-disallowed,
+.darkify_dark_mode_enabled .weasel-sim-container:not-disallowed,
+.darkify_dark_mode_enabled .optimized-controls:not-disallowed {
+  background-color: var(--af-bg-surface);
+  border-color: var(--af-border-subtle);
+  color: var(--af-text-main);
+}
