@@ -5,7 +5,8 @@
  */
 
 /* 1. Core dark theme variables + body baseline */
-.darkify_dark_mode_enabled body:not-disallowed {
+.darkify_dark_mode_enabled body:not-disallowed,
+html.darkify_dark_mode_enabled:not-disallowed {
   /* Backgrounds */
   --af-bg-page: #050509;
   --af-bg-surface: #101019;
@@ -41,6 +42,46 @@
   --af-input-border: rgba(255, 255, 255, 0.16);
   --af-input-border-focus: #9ec5ff;
   --af-input-placeholder: #858cab;
+
+  /* React Weasel simulation */
+  --af-weasel-surface: var(--af-bg-surface);
+  --af-weasel-surface-soft: var(--af-bg-surface-soft);
+  --af-weasel-border: var(--af-border-subtle);
+  --af-weasel-result-bg: var(--af-bg-surface-soft);
+  --af-weasel-result-current: var(--af-link);
+  --af-weasel-result-past: var(--af-text-main);
+  --af-weasel-result-empty: var(--af-text-muted);
+  --af-weasel-control-bg: var(--af-bg-surface);
+  --af-weasel-control-border: var(--af-border-subtle);
+  --af-weasel-stats-chip-bg: var(--af-link);
+  --af-weasel-stats-chip-text: #050509;
+  --af-weasel-slider-track: var(--af-border-subtle);
+  --af-weasel-toggle-track-off: var(--af-border-subtle);
+  --af-weasel-toggle-track-on: var(--af-link);
+  --af-weasel-toggle-knob: var(--af-bg-surface);
+  --af-weasel-toggle-knob-border: var(--af-border-strong);
+  --af-weasel-path-color: rgba(255, 255, 255, 0.87);
+  --af-weasel-corner-color: rgba(255, 255, 255, 0.87);
+  --af-weasel-source-color: #4ade80;
+  --af-weasel-badger-color: #f87171;
+
+  /* React Weasel simulation */
+  --af-weasel-surface: var(--af-bg-surface);
+  --af-weasel-surface-soft: var(--af-bg-surface-soft);
+  --af-weasel-border: var(--af-border-subtle);
+  --af-weasel-result-bg: var(--af-bg-surface-soft);
+  --af-weasel-result-current: var(--af-link);
+  --af-weasel-result-past: var(--af-text-main);
+  --af-weasel-result-empty: var(--af-text-muted);
+  --af-weasel-control-bg: var(--af-bg-surface);
+  --af-weasel-control-border: var(--af-border-subtle);
+  --af-weasel-stats-chip-bg: var(--af-link);
+  --af-weasel-stats-chip-text: #050509;
+  --af-weasel-slider-track: var(--af-border-subtle);
+  --af-weasel-toggle-track-off: var(--af-border-subtle);
+  --af-weasel-toggle-track-on: var(--af-link);
+  --af-weasel-toggle-knob: var(--af-bg-surface);
+  --af-weasel-toggle-knob-border: var(--af-border-strong);
 
   color: var(--af-text-main);
   background-color: var(--af-bg-page);

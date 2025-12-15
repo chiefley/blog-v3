@@ -82,6 +82,10 @@
     --af-weasel-toggle-track-on:  var(--af-accent);
     --af-weasel-toggle-knob:      #ffffff;
     --af-weasel-toggle-knob-border: #d1d5db;
+    --af-weasel-path-color:       #111827;
+    --af-weasel-corner-color:     #111827;
+    --af-weasel-source-color:     #16a34a;
+    --af-weasel-badger-color:     #dc2626;
 }
 
 /* -----------------------------------------------------------

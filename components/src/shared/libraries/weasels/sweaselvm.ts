@@ -2,6 +2,7 @@
 import { SWeaselWorld } from './sweaselworld';
 
 export class SWeaselVm {
+  private _container: HTMLElement;
   private _world: SWeaselWorld | undefined;
   private _context: CanvasRenderingContext2D;
   private _cycleTimer = 0;
@@ -11,6 +12,12 @@ export class SWeaselVm {
   private _scaleX = 1;
   private _scaleY = 1;
   private _isDarkMode = false;
+  private _colors: {
+    path: string;
+    corner: string;
+    source: string;
+    badger: string;
+  };
 
   private _field: HTMLCanvasElement;
   private _txtNumSources: HTMLInputElement;
@@ -27,6 +34,7 @@ export class SWeaselVm {
   private _allBtnStops: HTMLCollectionOf<HTMLButtonElement>;
 
   constructor(containerElem: HTMLElement, private mutationLevel: number, private withBadger: boolean, isDarkMode = false) {
+    this._container = containerElem;
     this._isDarkMode = isDarkMode;
     // Get UI elements
     this._field = containerElem.querySelector(".field")!;
@@ -49,9 +57,16 @@ export class SWeaselVm {
     }
 
     this._context = ctx;
+    this._colors = {
+      path: "#000000",
+      corner: "#000000",
+      source: "#16a34a",
+      badger: "#dc2626"
+    };
     
     // Fix canvas scaling to use the full display area
     this.setupCanvas();
+    this.updateColorsFromCss();
 
     // Set up event handlers
     this._btnReset.onclick = () => { this.btnResetClick(); };
@@ -71,6 +86,26 @@ export class SWeaselVm {
     this._generations = 0;
     this.viewEnable();
   }
+
+  private updateColorsFromCss = (): void => {
+    const styles = getComputedStyle(this._container);
+    const getVar = (name: string, fallback: string) => {
+      const value = styles.getPropertyValue(name);
+      return value ? value.trim() : fallback;
+    };
+
+    const defaultPath = this._isDarkMode ? "rgba(255, 255, 255, 0.87)" : "#111827";
+    const defaultCorner = defaultPath;
+    const defaultSource = this._isDarkMode ? "#4ade80" : "#16a34a";
+    const defaultBadger = this._isDarkMode ? "#f87171" : "#dc2626";
+
+    this._colors = {
+      path: getVar("--af-weasel-path-color", defaultPath) || defaultPath,
+      corner: getVar("--af-weasel-corner-color", defaultCorner) || defaultCorner,
+      source: getVar("--af-weasel-source-color", defaultSource) || defaultSource,
+      badger: getVar("--af-weasel-badger-color", defaultBadger) || defaultBadger
+    };
+  };
 
   private setupCanvas = (): void => {
     // Get the actual displayed size of the canvas
@@ -207,8 +242,8 @@ export class SWeaselVm {
     if (!this._world) return;
 
     this._context.lineWidth = 2;
-    this._context.strokeStyle = "green";
-    this._context.fillStyle = "green";
+    this._context.strokeStyle = this._colors.source;
+    this._context.fillStyle = this._colors.source;
     for (const p of this._world.foodSources) {
       this._context.beginPath();
       this._context.arc(p.x, p.y, 10, 0, 2 * Math.PI, false);
@@ -219,10 +254,9 @@ export class SWeaselVm {
   private DrawCorners = (): void => {
     if (!this._world) return;
 
-    const lineColor = this._isDarkMode ? 'rgba(255, 255, 255, 0.87)' : 'black';
     this._context.lineWidth = 2;
-    this._context.strokeStyle = lineColor;
-    this._context.fillStyle = lineColor;
+    this._context.strokeStyle = this._colors.corner;
+    this._context.fillStyle = this._colors.corner;
     for (const c of this._world.stops()) {
       this._context.beginPath();
       this._context.arc(c.x, c.y, 5, 0, 2 * Math.PI, false);
@@ -233,9 +267,8 @@ export class SWeaselVm {
   private DrawPaths = (): void => {
     if (!this._world) return;
 
-    const lineColor = this._isDarkMode ? 'rgba(255, 255, 255, 0.87)' : 'black';
     this._context.lineWidth = 1;
-    this._context.strokeStyle = lineColor;
+    this._context.strokeStyle = this._colors.path;
     for (const l of this._world.paths()) {
       this._context.beginPath();
       this._context.moveTo(l.start.x, l.start.y);
@@ -248,8 +281,8 @@ export class SWeaselVm {
     if (!this._world || !this.withBadger) return;
 
     this._context.lineWidth = 3;
-    this._context.strokeStyle = "red";
-    this._context.fillStyle = "red";
+    this._context.strokeStyle = this._colors.badger;
+    this._context.fillStyle = this._colors.badger;
     const p = this._world.badger.position;
     this._context.beginPath();
     this._context.arc(p.x, p.y, 12, 0, 2 * Math.PI, false);
@@ -296,6 +329,14 @@ export class SWeaselVm {
   // Public method to update theme
   public setDarkMode(isDarkMode: boolean): void {
     this._isDarkMode = isDarkMode;
+    this.updateColorsFromCss();
+    console.info("[WeaselSim] Theme change:", {
+      isDarkMode,
+      path: this._colors.path,
+      corner: this._colors.corner,
+      source: this._colors.source,
+      badger: this._colors.badger
+    });
     // Redraw if initialized
     if (this._initialized) {
       this.clearFieldPrivate();

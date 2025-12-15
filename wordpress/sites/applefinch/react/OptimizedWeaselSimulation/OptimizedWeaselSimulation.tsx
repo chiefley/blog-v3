@@ -26,11 +26,26 @@ const OptimizedWeaselSimulation: React.FC<OptimizedWeaselSimulationProps> = ({
   const [withBadger, setWithBadger] = useState<boolean>(initialWithBadger);
   const [showAdvancedControls, setShowAdvancedControls] = useState<boolean>(false);
 
+  const getIsDarkMode = () => {
+    if (typeof document === 'undefined') return false;
+    const bodyHas = document.body?.classList.contains('darkify_dark_mode_enabled');
+    const htmlHas = document.documentElement.classList.contains('darkify_dark_mode_enabled');
+    return Boolean(bodyHas || htmlHas);
+  };
+
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(getIsDarkMode());
+
   // Track if the simulation is initialized
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
-  // Always use light mode for the canvas since it has white background
-  const isDarkMode = false;
+  // Watch for Darkify toggles so the canvas palette follows the theme
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const targets = [document.body, document.documentElement].filter(Boolean) as HTMLElement[];
+    const observer = new MutationObserver(() => setIsDarkMode(getIsDarkMode()));
+    targets.forEach((target) => observer.observe(target, { attributes: true, attributeFilter: ['class'] }));
+    return () => observer.disconnect();
+  }, []);
 
   // Initialize the simulation once
   useEffect(() => {
@@ -49,8 +64,8 @@ const OptimizedWeaselSimulation: React.FC<OptimizedWeaselSimulationProps> = ({
           }
           .weasel-sim-container .stats > div {
             padding: 0.25rem 0.75rem;
-            background-color: #2563eb;
-            color: white;
+            background-color: var(--af-weasel-stats-chip-bg, #2563eb);
+            color: var(--af-weasel-stats-chip-text, #ffffff);
             border-radius: 0.75rem;
             font-size: 0.75rem;
             font-weight: 500;
@@ -64,10 +79,10 @@ const OptimizedWeaselSimulation: React.FC<OptimizedWeaselSimulationProps> = ({
           .weasel-sim-container canvas.field {
             width: 100%;
             height: auto;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--af-weasel-border, #e5e7eb);
             border-radius: 0.25rem;
             display: block;
-            background-color: #ffffff;
+            background-color: var(--af-surface, #ffffff);
           }
           .weasel-sim-container .controls {
             display: flex;
@@ -78,28 +93,30 @@ const OptimizedWeaselSimulation: React.FC<OptimizedWeaselSimulationProps> = ({
           .weasel-sim-container .controls button {
             padding: 0.25rem 0.75rem;
             border-radius: 0.25rem;
-            background-color: #2563eb;
-            color: white;
+            background-color: var(--af-accent, #2563eb);
+            color: var(--af-button-text, #ffffff);
             border: none;
             cursor: pointer;
             font-size: 0.75rem;
             font-weight: 500;
           }
           .weasel-sim-container .controls button:hover {
-            background-color: #1d4ed8;
+            background-color: var(--af-accent-hover, #1d4ed8);
           }
           .weasel-sim-container .controls button:disabled {
-            background-color: #9ca3af;
+            background-color: var(--af-weasel-toggle-track-off, #9ca3af);
             cursor: not-allowed;
           }
           .weasel-sim-container .controls input {
             padding: 0.25rem;
             border-radius: 0.25rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--af-border-subtle, #e5e7eb);
             margin-left: 0.25rem;
             margin-right: 0.25rem;
             width: 50px;
             font-size: 0.75rem;
+            background-color: var(--af-weasel-surface, #ffffff);
+            color: var(--af-text-main, #111827);
           }
           .weasel-sim-container .controls label {
             font-size: 0.75rem;
@@ -174,6 +191,13 @@ const OptimizedWeaselSimulation: React.FC<OptimizedWeaselSimulationProps> = ({
       optimizerRef.current.setSpeedMultiplier(speed);
     }
   }, [speed]);
+
+  // Sync theme changes into the simulation so canvas colors flip with Darkify
+  useEffect(() => {
+    if (optimizerRef.current) {
+      optimizerRef.current.setDarkMode(isDarkMode);
+    }
+  }, [isDarkMode]);
 
   // Handle badger toggle and reinitialize the simulation
   const handleBadgerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
