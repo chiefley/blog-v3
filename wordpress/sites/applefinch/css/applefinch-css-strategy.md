@@ -126,6 +126,38 @@ Our CSS only needs to provide design-system flips.
 
 Dark mode becomes a *pure palette swap*, not a layout rewrite.
 
+
+### Darkify Assumptions and Gotchas
+
+#### Darkify rewrites selectors
+Darkify’s “Custom CSS” UI automatically **prefixes/scopes** your rules under `.darkify_dark_mode_enabled`.  
+Selectors like `html.darkify_dark_mode_enabled:root { ... }` can be rewritten into selectors that never match (for example, `.darkify_dark_mode_enabled html...`), and then **none of your variables apply**.
+
+**Rule:** In the Darkify Custom CSS field, avoid `html...`, `:root`, or “double-scoped” selectors. Prefer `body:not-disallowed { ... }` (or specific page containers).
+
+#### Variables must live on a real element
+For React apps (and especially canvas apps) to see dark-mode values consistently:
+
+- Define the dark palette variables on `body:not-disallowed` (or a wrapper element that always exists).
+- If the app expects tokens like `--af-surface` / `--af-page-bg`, either define them directly or provide aliases from your `--af-bg-*` tokens.
+
+**Rule:** Never put “top-level” variable declarations outside a selector block; that’s invalid CSS and will be dropped.
+
+#### Canvas must be protected from dark-mode filters
+Some dark-mode approaches apply `filter:` transforms to large DOM regions. Canvas output can be unintentionally inverted/shifted.
+
+**Rule:** For canvas-based React apps, add a defensive rule in Darkify CSS:
+
+```css
+.weasel-sim-container canvas {
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  background-color: var(--af-weasel-surface, var(--af-surface)) !important;
+}
+```
+
+(Background color matters: canvas does **not** “inherit” a background the way normal elements do.)
+
 ---
 
 ## 4. Variable Naming & Usage
@@ -197,6 +229,30 @@ React components:
 - Use wrapper classes (e.g., `.optimized-weasel-wrapper`).
 - Rely on `--af-*` variables for palette & typography.
 - Automatically respond to Dark Mode via variable swaps.
+
+
+### React App Assumptions
+
+#### Token contract
+React apps must treat the WordPress theme as the “source of truth” for palette:
+
+- Do not hard-code colors in JS.
+- Read colors from `--af-*` variables (either on `body` or the app wrapper).
+- Prefer stable “global” tokens (`--af-surface`, `--af-text-main`, etc.) and use component tokens (`--af-weasel-*`) only for app-specific accents.
+
+#### Dark mode detection
+React apps should not need to “know about Darkify” beyond this:
+
+- Dark mode is expressed via **different CSS variable values**.
+- If the app caches colors at mount time (common in canvas apps), it must re-read variables and redraw when Darkify toggles. A simple trigger is a `MutationObserver` watching class changes on `<html>`/`<body>`.
+
+#### Canvas rendering rule of thumb
+Canvas does not inherit styling, so you must explicitly:
+
+- Clear and paint the background each redraw, using a token-derived background color.
+- Keep stroke/text colors token-driven.
+
+This prevents the “light strokes on white canvas” failure mode when only some tokens flip.
 
 ---
 

@@ -1,12 +1,14 @@
 /* Darkify – Dark Mode CSS for Applefinch
- * IMPORTANT:
- * - All rules are scoped to .darkify_dark_mode_enabled
- * - We use :not-disallowed so Darkify does NOT exclude these elements
- */
+   Notes:
+   - Darkify automatically scopes/prefixes these rules under .darkify_dark_mode_enabled
+   - So do NOT use selectors like html.darkify_dark_mode_enabled:root here
+*/
 
-/* 1. Core dark theme variables + body baseline */
-.darkify_dark_mode_enabled body:not-disallowed,
-html.darkify_dark_mode_enabled:not-disallowed {
+/* ------------------------------------------------------------
+   0) Core token definitions (define on BODY for reliable reading)
+------------------------------------------------------------ */
+
+body:not-disallowed {
   /* Backgrounds */
   --af-bg-page: #050509;
   --af-bg-surface: #101019;
@@ -14,6 +16,11 @@ html.darkify_dark_mode_enabled:not-disallowed {
   --af-bg-header: #050509;
   --af-bg-footer: #050509;
   --af-bg-accent-soft: rgba(120, 173, 246, 0.08);
+
+  /* Aliases expected by React/canvas bundle + Additional CSS */
+  --af-page-bg: var(--af-bg-page);
+  --af-surface: var(--af-bg-surface);
+  --af-surface-soft: var(--af-bg-surface-soft);
 
   /* Borders */
   --af-border-subtle: rgba(255, 255, 255, 0.06);
@@ -43,122 +50,135 @@ html.darkify_dark_mode_enabled:not-disallowed {
   --af-input-border-focus: #9ec5ff;
   --af-input-placeholder: #858cab;
 
-  /* React Weasel simulation */
+  /* React Weasel simulation tokens */
   --af-weasel-surface: var(--af-bg-surface);
   --af-weasel-surface-soft: var(--af-bg-surface-soft);
   --af-weasel-border: var(--af-border-subtle);
+
   --af-weasel-result-bg: var(--af-bg-surface-soft);
   --af-weasel-result-current: var(--af-link);
   --af-weasel-result-past: var(--af-text-main);
   --af-weasel-result-empty: var(--af-text-muted);
+
   --af-weasel-control-bg: var(--af-bg-surface);
   --af-weasel-control-border: var(--af-border-subtle);
+
   --af-weasel-stats-chip-bg: var(--af-link);
   --af-weasel-stats-chip-text: #050509;
+
   --af-weasel-slider-track: var(--af-border-subtle);
   --af-weasel-toggle-track-off: var(--af-border-subtle);
   --af-weasel-toggle-track-on: var(--af-link);
   --af-weasel-toggle-knob: var(--af-bg-surface);
   --af-weasel-toggle-knob-border: var(--af-border-strong);
+
   --af-weasel-path-color: rgba(255, 255, 255, 0.87);
   --af-weasel-corner-color: rgba(255, 255, 255, 0.87);
   --af-weasel-source-color: #4ade80;
   --af-weasel-badger-color: #f87171;
 
-  /* React Weasel simulation */
-  --af-weasel-surface: var(--af-bg-surface);
-  --af-weasel-surface-soft: var(--af-bg-surface-soft);
-  --af-weasel-border: var(--af-border-subtle);
-  --af-weasel-result-bg: var(--af-bg-surface-soft);
-  --af-weasel-result-current: var(--af-link);
-  --af-weasel-result-past: var(--af-text-main);
-  --af-weasel-result-empty: var(--af-text-muted);
-  --af-weasel-control-bg: var(--af-bg-surface);
-  --af-weasel-control-border: var(--af-border-subtle);
-  --af-weasel-stats-chip-bg: var(--af-link);
-  --af-weasel-stats-chip-text: #050509;
-  --af-weasel-slider-track: var(--af-border-subtle);
-  --af-weasel-toggle-track-off: var(--af-border-subtle);
-  --af-weasel-toggle-track-on: var(--af-link);
-  --af-weasel-toggle-knob: var(--af-bg-surface);
-  --af-weasel-toggle-knob-border: var(--af-border-strong);
-
-  color: var(--af-text-main);
-  background-color: var(--af-bg-page);
+  color: var(--af-text-main) !important;
+  background-color: var(--af-bg-page) !important;
 }
 
-/* 2. Main layout shells (GeneratePress containers) */
-.darkify_dark_mode_enabled .site:not-disallowed,
-.darkify_dark_mode_enabled .site-header:not-disallowed,
-.darkify_dark_mode_enabled .site-footer:not-disallowed,
-.darkify_dark_mode_enabled .inside-header:not-disallowed,
-.darkify_dark_mode_enabled .inside-site-info:not-disallowed,
-.darkify_dark_mode_enabled .site-content:not-disallowed,
-.darkify_dark_mode_enabled .content-area:not-disallowed,
-.darkify_dark_mode_enabled .inside-article:not-disallowed,
-.darkify_dark_mode_enabled .widget:not-disallowed,
-.darkify_dark_mode_enabled .comments-area:not-disallowed,
-.darkify_dark_mode_enabled .inside-right-sidebar:not-disallowed {
-  background-color: var(--af-bg-surface-soft);
-  color: var(--af-text-main);
-  border-color: var(--af-border-subtle);
+/* ------------------------------------------------------------
+   1) Main layout shells (GeneratePress containers)
+------------------------------------------------------------ */
+
+.site:not-disallowed,
+.site-header:not-disallowed,
+.site-footer:not-disallowed,
+.inside-header:not-disallowed,
+.inside-site-info:not-disallowed,
+.site-content:not-disallowed,
+.content-area:not-disallowed,
+.inside-article:not-disallowed,
+.widget:not-disallowed,
+.comments-area:not-disallowed,
+.inside-right-sidebar:not-disallowed {
+  background-color: var(--af-bg-surface-soft) !important;
+  color: var(--af-text-main) !important;
+  border-color: var(--af-border-subtle) !important;
 }
 
-/* 3. Links */
-.darkify_dark_mode_enabled a:not-disallowed {
-  color: var(--af-link);
+/* ------------------------------------------------------------
+   2) Links
+------------------------------------------------------------ */
+
+a:not-disallowed {
+  color: var(--af-link) !important;
 }
 
-.darkify_dark_mode_enabled a:not-disallowed:hover,
-.darkify_dark_mode_enabled a:not-disallowed:focus {
-  color: var(--af-link-hover);
+a:not-disallowed:hover,
+a:not-disallowed:focus {
+  color: var(--af-link-hover) !important;
 }
 
-/* 4. Inputs / comment form / search */
-.darkify_dark_mode_enabled input.darkify_style_form_element:not-disallowed,
-.darkify_dark_mode_enabled textarea.darkify_style_form_element:not-disallowed,
-.darkify_dark_mode_enabled select.darkify_style_form_element:not-disallowed,
-.darkify_dark_mode_enabled .search-form input.darkify_style_form_element:not-disallowed {
+/* ------------------------------------------------------------
+   3) Inputs / comment form / search
+------------------------------------------------------------ */
+
+input.darkify_style_form_element:not-disallowed,
+textarea.darkify_style_form_element:not-disallowed,
+select.darkify_style_form_element:not-disallowed,
+.search-form input.darkify_style_form_element:not-disallowed {
   background-color: var(--af-input-bg) !important;
   color: var(--af-text-main) !important;
   border-color: var(--af-input-border) !important;
 }
 
-.darkify_dark_mode_enabled input.darkify_style_form_element:not-disallowed::placeholder,
-.darkify_dark_mode_enabled textarea.darkify_style_form_element:not-disallowed::placeholder {
-  color: var(--af-input-placeholder);
+input.darkify_style_form_element:not-disallowed::placeholder,
+textarea.darkify_style_form_element:not-disallowed::placeholder {
+  color: var(--af-input-placeholder) !important;
 }
 
-/* 5. Buttons (including Darkify-styled & GP buttons) */
-.darkify_dark_mode_enabled .darkify_style_button:not-disallowed,
-.darkify_dark_mode_enabled button:not-disallowed,
-.darkify_dark_mode_enabled .button:not-disallowed,
-.darkify_dark_mode_enabled .wp-block-button__link:not-disallowed {
-  background-color: var(--af-link);
-  color: #050509;
-  border-color: transparent;
+/* ------------------------------------------------------------
+   4) Buttons (including Darkify-styled & GP buttons)
+------------------------------------------------------------ */
+
+.darkify_style_button:not-disallowed,
+button:not-disallowed,
+.button:not-disallowed,
+.wp-block-button__link:not-disallowed {
+  background-color: var(--af-link) !important;
+  color: #050509 !important;
+  border-color: transparent !important;
 }
 
-.darkify_dark_mode_enabled .darkify_style_button:not-disallowed:hover,
-.darkify_dark_mode_enabled button:not-disallowed:hover,
-.darkify_dark_mode_enabled .button:not-disallowed:hover,
-.darkify_dark_mode_enabled .wp-block-button__link:not-disallowed:hover {
-  background-color: var(--af-link-hover);
+.darkify_style_button:not-disallowed:hover,
+button:not-disallowed:hover,
+.button:not-disallowed:hover,
+.wp-block-button__link:not-disallowed:hover {
+  background-color: var(--af-link-hover) !important;
 }
 
-/* 6. Code blocks */
-.darkify_dark_mode_enabled pre:not-disallowed,
-.darkify_dark_mode_enabled code:not-disallowed {
-  background-color: var(--af-code-bg);
-  border-color: var(--af-code-border);
-  color: var(--af-text-main);
+/* ------------------------------------------------------------
+   5) Code blocks
+------------------------------------------------------------ */
+
+pre:not-disallowed,
+code:not-disallowed {
+  background-color: var(--af-code-bg) !important;
+  border-color: var(--af-code-border) !important;
+  color: var(--af-text-main) !important;
 }
 
-/* 7. React Weasel simulation shell */
-.darkify_dark_mode_enabled .optimized-weasel-wrapper:not-disallowed,
-.darkify_dark_mode_enabled .weasel-sim-container:not-disallowed,
-.darkify_dark_mode_enabled .optimized-controls:not-disallowed {
-  background-color: var(--af-bg-surface);
-  border-color: var(--af-border-subtle);
-  color: var(--af-text-main);
+/* ------------------------------------------------------------
+   6) React Weasel simulation shell + CANVAS protection
+------------------------------------------------------------ */
+
+.optimized-weasel-wrapper:not-disallowed,
+.weasel-sim-container:not-disallowed,
+.optimized-controls:not-disallowed {
+  background-color: var(--af-bg-surface) !important;
+  border-color: var(--af-border-subtle) !important;
+  color: var(--af-text-main) !important;
 }
+
+/* Ensure canvas always uses our dark surface and is not filter-inverted */
+.weasel-sim-container canvas.field:not-disallowed {
+  background-color: var(--af-weasel-surface) !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
